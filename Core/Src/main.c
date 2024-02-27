@@ -24,9 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "arm_math.h"
-
-#include "statespace.h"
+#include "statespace_config.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,12 +45,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-STATE_SPACE_Handle_TypeDef mdl = {
-    .Ad = &Ad, .Bd = &Bd,
-    .x = &x, .u = &u,
-    .Ad_x = &Ad_x, .Bd_u = &Bd_u
-};
-
 float x1, x2;
 /* USER CODE END PV */
 
@@ -71,6 +63,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if(htim == &htim2)
   {
     float u = 1.0; // step response
+
     STATE_SPACE_UpdateState(&mdl, &u);
 
     // for Serial Wire Viewer plotting
@@ -112,7 +105,6 @@ int main(void)
   MX_USART3_UART_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  STATE_SPACE_Init(&mdl);
   HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
 

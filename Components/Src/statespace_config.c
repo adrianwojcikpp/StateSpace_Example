@@ -1,16 +1,26 @@
 /**
   ******************************************************************************
-  * @file     : statespace.c
+  * @file     : statespace_config.c
   * @author   : AW    Adrian.Wojcik@put.poznan.pl
   * @version  : 1.0.0
   * @date     : Feb 26, 2024
   * @brief    : Simple state space model implementation based on CMSIS DSP
+  *             Configuration file.
   *
   ******************************************************************************
   */
 
 /* Private includes ----------------------------------------------------------*/
 #include "statespace.h"
+
+#include "Ad_mat.h"
+#include "Bd_mat.h"
+
+#include "x_mat.h"
+#include "u_mat.h"
+
+#include "Ad_x_mat.h"
+#include "Bd_u_mat.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -21,6 +31,14 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* Public variables ----------------------------------------------------------*/
+STATE_SPACE_Handle_TypeDef mdl = {
+    .Ad = &Ad,
+    .Bd = &Bd,
+    .x = &x,
+    .u = &u,
+    .Ad_x = &Ad_x,
+    .Bd_u = &Bd_u
+};
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -29,19 +47,3 @@
 /* Private functions ---------------------------------------------------------*/
 
 /* Public functions ----------------------------------------------------------*/
-
-/**
- * @brief State space model update
- * @param[in/out] hmdl  : State space model handler
- * @param[in]     u     : Array with input values
- * @retval None
- */
-void STATE_SPACE_UpdateState(STATE_SPACE_Handle_TypeDef* hmdl, float* u)
-{
-  for(unsigned int i = 0; i < hmdl->u->numRows; i++)
-    hmdl->u->pData[i] = u[i];
-
-  arm_mat_mult_f32(hmdl->Bd, hmdl->u, hmdl->Bd_u);
-  arm_mat_mult_f32(hmdl->Ad, hmdl->x, hmdl->Ad_x);
-  arm_mat_add_f32(hmdl->Ad_x, hmdl->Bd_u, hmdl->x); // new value of state vector x
-}

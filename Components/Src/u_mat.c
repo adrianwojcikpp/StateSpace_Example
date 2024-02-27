@@ -1,8 +1,10 @@
 /* MATLAB GENERATED SOURCE FILE: u_mat.c */
 #include "u_mat.h"
-uint32_t U_DATA_UINT[U_ROWS*U_COLS] = 
-{
+uint32_t U_DATA_UINT[1] = {
   #include "u.csv"
 };
-float32_t* U_DATA = (float32_t*)U_DATA_UINT;
-arm_matrix_instance_f32 u;
+arm_matrix_instance_f32 u = {
+   .numRows = 1,
+   .numCols = 1,
+   .pData = (float32_t*)U_DATA_UINT
+};

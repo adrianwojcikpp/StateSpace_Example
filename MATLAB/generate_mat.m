@@ -19,9 +19,9 @@ HEADER_STR = {
     ''
     '#include "arm_math.h"'
     ''
-   ['#define ' upper(name) '_ROWS ' num2str(size(x,1))]
-   ['#define ' upper(name) '_COLS ' num2str(size(x,2))]
-   ['extern float32_t* ' upper(name) '_DATA;']
+   %['#define ' upper(name) '_ROWS ' num2str(size(x,1))]
+   %['#define ' upper(name) '_COLS ' num2str(size(x,2))]
+   %['extern float32_t* ' upper(name) '_DATA;']
    ['extern arm_matrix_instance_f32 ' name ';']
     ''
    ['#endif /* INC_' upper(name) '_MAT_H_ */']
@@ -36,12 +36,14 @@ fclose(fileID);
 SOURCE_STR = {
    ['/* MATLAB GENERATED SOURCE FILE: ' name '_mat.c */']
    ['#include "' name '_mat.h"']
-   ['uint32_t ' upper(name) '_DATA_UINT[' upper(name) '_ROWS*' upper(name) '_COLS] = ']
-    '{'
+   ['uint32_t ' upper(name) '_DATA_UINT[' num2str(size(x,1)*size(x,2)) '] = {']
    ['  #include "' name '.csv"']
-    '};'
-   ['float32_t* ' upper(name) '_DATA = (float32_t*)' upper(name) '_DATA_UINT;']   
-   ['arm_matrix_instance_f32 ' name ';']
+   '};'
+   ['arm_matrix_instance_f32 ' name ' = {']
+   ['   .numRows = ' num2str(size(x,1)) ',']
+   ['   .numCols = ' num2str(size(x,2)) ',']
+   ['   .pData = (float32_t*)' upper(name) '_DATA_UINT']
+   '};'
 };
 
 fileID = fopen([name '_mat.c'],'w');
