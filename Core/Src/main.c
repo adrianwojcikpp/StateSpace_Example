@@ -45,7 +45,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-float x1, x2;
+float x1;
+float x2;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

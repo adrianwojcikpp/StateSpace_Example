@@ -14,26 +14,11 @@
 close all; clc;
 clear A B C D mdlc Ts Ad Bd Cd Dc mdld x u
 
-%% CONTINUOUS TIME STATE SPACE MODEL 
+%% CREATE DC MOTOR MODEL
+run('DC_motor_model.m');
 
-x = [0; 0];
-u = 1;
-
-% TODO: replace with **your** model
-A = [-0.2, -1.0;  1.0,  0.0];
-B = [ 1.0;  0.0];
-% assuming that ouput vector is state vector
-C = eye(size(A)); 
-D = zeros(size(B));
-
-mdlc = ss(A,B,C,D);
-
-%% DISCRETE TIME STATE SPACE MODEL 
-
-% TODO: define sample time
-Ts = 0.1; % [s]
-
-mdld = c2d(mdlc, Ts, 'tustin');
+x = zeros(size(mdld.A,2),1);
+u = zeros(size(mdld.B,2),1);
 
 %% EXPORT MATRICES TO .C/.H FILES
 generate_mat('Ad', mdld.A);
